@@ -26,18 +26,73 @@ double operate(double a, char operator, double b) {
     return result;
 };
 
-/* 
-double convert (double a, char unit) {
-    switch (unit) {
-        case '"'
+double convert (double a, char *unit) {
+    double result;
+
+    if (strcmp(unit, "in") == 0) {
+        result = a * 25400000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 304800000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 914400000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 1609344000000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 25400000; // RESUME HERE
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 25400000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 25400000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 25400000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 25400000;
+    } else if (strcmp(unit, "in") == 0) {
+        result = a * 25400000;
+    } else {
+        result = 0;
     };
+    
+    switch (strcmpunit) {
+        case *"in":
+            result = a * 25400000;
+            break;
+        case *"ft":
+            result = a * 304800000;
+            break;
+        case *"yd":
+            result = a * 914400000;
+            break;
+        case *"mi":
+            result = a * 1609344000000;
+            break;
+        case "mm":
+            result = a * 1000000;
+            break;
+        case *"cm":
+            result = a * 10000000;
+            break;
+        case *"dm":
+            result = a * 100000000;
+            break;
+        case 'm':
+            result = a * 1000000000;
+            break;
+        case *"km":
+            result = a * 1000000000000;
+            break;
+        default:
+            return 0;
+    };
+    return result;
 };
-*/
+
 int main () {
     char input[200];
     char *tokens[100];
     char *holdingStack[100];
     char *output[200];
+    char *unit[2];
 
     printf("Enter a string: \n");
 
@@ -46,13 +101,13 @@ int main () {
     if (input[inputLength - 1] == '\n') input[inputLength - 1] = '\0';
     printf("You entered: %s\nLength: %d\n", input, inputLength);
 
-    int i = 0;
     int tokenCount = 0;
     int tokenLength = 0;
     int holdingCount = 0;
     int outputCount = 0;
     char *token = strtok(input, " ");
 
+    int i = 0;
     while (token != NULL && i < 100) {
         tokens[i] = token;
         token = strtok(NULL, " ");
