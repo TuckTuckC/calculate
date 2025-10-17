@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#define IMPERIAL 1
+#define METRIC 2
+
 double operate(double a, char operator, double b) {
     double result;
     switch(operator) {
@@ -28,62 +31,30 @@ double operate(double a, char operator, double b) {
 
 double convert (double a, char *unit) {
     double result;
+    char convertedResult[50];
 
     if (strcmp(unit, "in") == 0) {
         result = a * 25400000;
-    } else if (strcmp(unit, "in") == 0) {
+    } else if (strcmp(unit, "ft") == 0) {
         result = a * 304800000;
-    } else if (strcmp(unit, "in") == 0) {
+    } else if (strcmp(unit, "yd") == 0) {
         result = a * 914400000;
-    } else if (strcmp(unit, "in") == 0) {
+    } else if (strcmp(unit, "mi") == 0) {
         result = a * 1609344000000;
-    } else if (strcmp(unit, "in") == 0) {
-        result = a * 25400000; // RESUME HERE
-    } else if (strcmp(unit, "in") == 0) {
-        result = a * 25400000;
-    } else if (strcmp(unit, "in") == 0) {
-        result = a * 25400000;
-    } else if (strcmp(unit, "in") == 0) {
-        result = a * 25400000;
-    } else if (strcmp(unit, "in") == 0) {
-        result = a * 25400000;
-    } else if (strcmp(unit, "in") == 0) {
-        result = a * 25400000;
+    } else if (strcmp(unit, "mm") == 0) {
+        result = a * 1000000;
+    } else if (strcmp(unit, "cm") == 0) {
+        result = a * 10000000;
+    } else if (strcmp(unit, "dm") == 0) {
+        result = a * 100000000;
+    } else if (strcmp(unit, "m") == 0) {
+        result = a * 1000000000;
+    } else if (strcmp(unit, "km") == 0) {
+        result = a * 10000000000;
     } else {
         result = 0;
     };
-    
-    switch (strcmpunit) {
-        case *"in":
-            result = a * 25400000;
-            break;
-        case *"ft":
-            result = a * 304800000;
-            break;
-        case *"yd":
-            result = a * 914400000;
-            break;
-        case *"mi":
-            result = a * 1609344000000;
-            break;
-        case "mm":
-            result = a * 1000000;
-            break;
-        case *"cm":
-            result = a * 10000000;
-            break;
-        case *"dm":
-            result = a * 100000000;
-            break;
-        case 'm':
-            result = a * 1000000000;
-            break;
-        case *"km":
-            result = a * 1000000000000;
-            break;
-        default:
-            return 0;
-    };
+    sprintf(convertedResult, "%f", result);
     return result;
 };
 
@@ -92,7 +63,7 @@ int main () {
     char *tokens[100];
     char *holdingStack[100];
     char *output[200];
-    char *unit[2];
+    int system;
 
     printf("Enter a string: \n");
 
@@ -121,9 +92,10 @@ int main () {
         char *end;
         double num = strtod(tokens[tokenCount], &end);
         printf("Token: %s\n", tokens[tokenCount]);
-        printf("end: %s\n", end);
+        printf("end: %d\n", *end);
+        printf("num: %f\n", num);
 
-        if (isdigit(tokens[tokenCount][0])) {
+        if (*end == 0) {
             // It's a number 
             output[outputCount] = tokens[tokenCount];
             printf("%s added to output\n", tokens[tokenCount]);
@@ -175,7 +147,18 @@ int main () {
                     holdingCount--;
                 }
             };
-        } else printf("Must be a unit of measurement\n");
+        } else {
+            printf("%s Must be a unit of measurement\n", end);
+            if (*end == *"in" || *end == *"ft" || *end == *"yd" || *end == *"mi") {
+                system = IMPERIAL;
+                printf("System = %d\n", system);
+                *output[outputCount] = convert(num, end);
+                printf("Converted output added to output = %.2f", output[outputCount]);
+                outputCount++;
+                tokenCount++;
+                // if system && system != imperial: system will be user's choice
+            };
+        };
     };
 
     int solveCount = 0;
@@ -205,7 +188,7 @@ int main () {
         };
     };
     
-    printf("result = %.2f", solveStack[0]);
+    printf("result = %.2f\n", solveStack[0]);
 
     return 0;
 };
