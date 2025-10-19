@@ -5,6 +5,8 @@
 
 #define IMPERIAL 1
 #define METRIC 2
+#define NUMBER 3
+#define OPERATOR 4
 
 double operate(double a, char operator, double b) {
     double result;
