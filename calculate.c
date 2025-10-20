@@ -64,8 +64,16 @@ int main () {
     char input[200];
     char *tokens[100];
     char *holdingStack[100];
-    char *output[200];
+    // char *output[200];
     int system;
+
+    struct {
+        int dataType;
+        union {
+            double num;
+            char op;
+        } value;
+    } output[200];
 
     printf("Enter a string: \n");
 
@@ -99,15 +107,15 @@ int main () {
 
         if (*end == 0) {
             // It's a number 
-            output[outputCount] = tokens[tokenCount];
-            printf("%s added to output\n", tokens[tokenCount]);
+            output[outputCount].value.num = *tokens[tokenCount];
+            printf("%.2f added to output\n", output[outputCount].value.num);
             outputCount++;
             tokenCount++;
 
             if (tokenCount == tokenLength) {
                 for (int h = 0; h < holdingCount; h++) {
-                    output[outputCount] = holdingStack[h];
-                    printf("%s added to output\n", holdingStack[h]);
+                    output[outputCount].value.num = *holdingStack[h];
+                    printf("%.2f added to output\n", output[outputCount].value.num);
                     outputCount++;
                 };
             };
@@ -121,8 +129,8 @@ int main () {
                 tokenCount++;
 
             } else if (*end == '+' || *end == '-') {
-                output[outputCount] = holdingStack[holdingCount - 1];
-                printf("%s added to output\n", output[outputCount]);
+                output[outputCount].value.op = *holdingStack[holdingCount - 1];
+                printf("%c added to output\n", output[outputCount].value.op);
                 holdingCount--;
                 outputCount++;
 
@@ -143,8 +151,8 @@ int main () {
                     *holdingStack[holdingCount - 1] == '/'
                 ) {
                     //c
-                    output[outputCount] = holdingStack[holdingCount -1];
-                    printf("%s added to output\n", output[outputCount]);
+                    output[outputCount].value.op = *holdingStack[holdingCount -1];
+                    printf("%c added to output\n", output[outputCount].value.op);
                     outputCount++;
                     holdingCount--;
                 }
@@ -154,8 +162,8 @@ int main () {
             if (*end == *"in" || *end == *"ft" || *end == *"yd" || *end == *"mi") {
                 system = IMPERIAL;
                 printf("System = %d\n", system);
-                *output[outputCount] = convert(num, end);
-                printf("Converted output added to output = %.2f", output[outputCount]);
+                output[outputCount].value.num = convert(num, end);
+                printf("Converted output added to output = %.2f", output[outputCount].value.num);
                 outputCount++;
                 tokenCount++;
                 // if system && system != imperial: system will be user's choice
