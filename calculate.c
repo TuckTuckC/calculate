@@ -56,7 +56,6 @@ double convert (double a, char *unit) {
     } else {
         result = 0;
     };
-    sprintf(convertedResult, "%f", result);
     return result;
 };
 
@@ -107,8 +106,10 @@ int main () {
 
         if (*end == 0) {
             // It's a number 
-            output[outputCount].value.num = *tokens[tokenCount];
+            output[outputCount].value.num = num;
+            output[outputCount].dataType = NUMBER;
             printf("%.2f added to output\n", output[outputCount].value.num);
+            printf("output.value.op: %c\n", output[outputCount].value.op);
             outputCount++;
             tokenCount++;
 
@@ -130,6 +131,7 @@ int main () {
 
             } else if (*end == '+' || *end == '-') {
                 output[outputCount].value.op = *holdingStack[holdingCount - 1];
+                output[outputCount].dataType = OPERATOR;
                 printf("%c added to output\n", output[outputCount].value.op);
                 holdingCount--;
                 outputCount++;
@@ -152,6 +154,7 @@ int main () {
                 ) {
                     //c
                     output[outputCount].value.op = *holdingStack[holdingCount -1];
+                    output[outputCount].dataType = OPERATOR;
                     printf("%c added to output\n", output[outputCount].value.op);
                     outputCount++;
                     holdingCount--;
@@ -176,11 +179,10 @@ int main () {
     int outputlength = outputCount;
     outputCount = 0;
     while (outputCount < outputlength) {
-        if (isdigit(output[outputCount][0])) {
+        if (output[outputCount].dataType == NUMBER) {
             // it's a number 
             char *end;
-            double num = strtod(output[outputCount], &end);
-            solveStack[solveCount] = num;
+            solveStack[solveCount] = output[outputCount].value.num;
             printf("%.2f added to solveStack\n", solveStack[solveCount]);
             outputCount++;
             solveCount++;
@@ -188,7 +190,7 @@ int main () {
         } else {
             double result = operate(
                                 solveStack[solveCount - 2], 
-                                *output[outputCount], 
+                                output[outputCount].value.op, 
                                 solveStack[solveCount - 1]
                             );
             solveStack[solveCount - 2] = result;
