@@ -108,15 +108,15 @@ int main () {
             // It's a number 
             output[outputCount].value.num = num;
             output[outputCount].dataType = NUMBER;
-            printf("%.2f added to output\n", output[outputCount].value.num);
+            printf("%.2f added to output 1\n", output[outputCount].value.num);
             printf("output.value.op: %c\n", output[outputCount].value.op);
             outputCount++;
             tokenCount++;
 
             if (tokenCount == tokenLength) {
-                for (int h = 0; h < holdingCount; h++) {
+                for (int h = 0; h < holdingCount - 1; h++) {
                     output[outputCount].value.num = *holdingStack[h];
-                    printf("%.2f added to output\n", output[outputCount].value.num);
+                    printf("%.2f added to output 2\n", output[outputCount].value.num);
                     outputCount++;
                 };
             };
@@ -125,14 +125,14 @@ int main () {
             // It's an operator
             if (holdingCount == 0) {
                 holdingStack[holdingCount] = tokens[tokenCount];
-                printf("%s added to holdingStack\n", holdingStack[holdingCount]);
+                printf("%s added to holdingStack 1\n", holdingStack[holdingCount]);
                 holdingCount++;
                 tokenCount++;
 
             } else if (*end == '+' || *end == '-') {
                 output[outputCount].value.op = *holdingStack[holdingCount - 1];
                 output[outputCount].dataType = OPERATOR;
-                printf("%c added to output\n", output[outputCount].value.op);
+                printf("%c added to output 3\n", output[outputCount].value.op);
                 holdingCount--;
                 outputCount++;
 
@@ -143,7 +143,7 @@ int main () {
                     *holdingStack[holdingCount - 1] == '-'
                 ) {
                     holdingStack[holdingCount] = tokens[tokenCount];
-                    printf("%s added to holdingStack\n", holdingStack[holdingCount]);
+                    printf("%s added to holdingStack 2\n", holdingStack[holdingCount]);
                     holdingCount++;
                     tokenCount++;
 
@@ -155,7 +155,7 @@ int main () {
                     //c
                     output[outputCount].value.op = *holdingStack[holdingCount -1];
                     output[outputCount].dataType = OPERATOR;
-                    printf("%c added to output\n", output[outputCount].value.op);
+                    printf("%c added to output 4\n", output[outputCount].value.op);
                     outputCount++;
                     holdingCount--;
                 }
@@ -178,7 +178,8 @@ int main () {
     double solveStack[200];
     int outputlength = outputCount;
     outputCount = 0;
-    while (outputCount < outputlength) {
+    while (outputCount <= outputlength) {
+        printf("datatype: %d\n", output[outputCount].dataType);
         if (output[outputCount].dataType == NUMBER) {
             // it's a number 
             char *end;
