@@ -104,6 +104,16 @@ int main () {
         printf("end: %d\n", *end);
         printf("num: %f\n", num);
 
+        // Move this function somewhere it will get called from
+        if (tokenCount == tokenLength) {
+            for (int h = 0; h < holdingCount - 1; h++) {
+                output[outputCount].value.op = *holdingStack[h];
+                printf("%c added to output 2\n", output[outputCount].value.op);
+                outputCount++;
+                tokenCount++;
+            };
+        };
+
         if (*end == 0) {
             // It's a number 
             output[outputCount].value.num = num;
@@ -112,14 +122,7 @@ int main () {
             printf("output.value.op: %c\n", output[outputCount].value.op);
             outputCount++;
             tokenCount++;
-
-            if (tokenCount == tokenLength) {
-                for (int h = 0; h < holdingCount - 1; h++) {
-                    output[outputCount].value.num = *holdingStack[h];
-                    printf("%.2f added to output 2\n", output[outputCount].value.num);
-                    outputCount++;
-                };
-            };
+            printf("TokenCount: %d\nTokenLength: %d\n", tokenCount, tokenLength);
 
         } else if (end == tokens[tokenCount]) {
             // It's an operator
@@ -180,6 +183,8 @@ int main () {
     outputCount = 0;
     while (outputCount < outputlength) {
         printf("datatype: %d\n", output[outputCount].dataType);
+        printf("number: %f\n", output[outputCount].value.num);
+        printf("operator: %c\n", output[outputCount].value.op);
         if (output[outputCount].dataType == NUMBER) {
             // it's a number 
             solveStack[solveCount] = output[outputCount].value.num;
@@ -187,7 +192,7 @@ int main () {
             outputCount++;
             solveCount++;
 
-        } else {
+        } else if (output[outputCount].dataType == OPERATOR) {
             double result = operate(
                                 solveStack[solveCount - 2], 
                                 output[outputCount].value.op, 
