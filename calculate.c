@@ -178,11 +178,10 @@ int main () {
     double solveStack[200];
     int outputlength = outputCount;
     outputCount = 0;
-    while (outputCount <= outputlength) {
+    while (outputCount < outputlength) {
         printf("datatype: %d\n", output[outputCount].dataType);
         if (output[outputCount].dataType == NUMBER) {
             // it's a number 
-            char *end;
             solveStack[solveCount] = output[outputCount].value.num;
             printf("%.2f added to solveStack\n", solveStack[solveCount]);
             outputCount++;
