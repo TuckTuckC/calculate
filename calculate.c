@@ -97,22 +97,27 @@ int main () {
 
     printf("tokenLength: %i\n", tokenLength);
 
-    while (tokenCount < tokenLength ) {
+    while (tokenCount <= tokenLength ) {
+        printf("holdingCount: %d\n", holdingCount);
+        if (tokenCount == tokenLength) {
+            for (int h = 0; h < holdingCount; h++) {
+                printf("GOT HERE\n");
+                output[outputCount].value.op = *holdingStack[h];
+                output[outputCount].dataType = OPERATOR;
+                printf("%c added to output 2\n", output[outputCount].value.op);
+                outputCount++;
+            };
+            tokenCount++;
+        } else {
+
         char *end;
         double num = strtod(tokens[tokenCount], &end);
         printf("Token: %s\n", tokens[tokenCount]);
         printf("end: %d\n", *end);
         printf("num: %f\n", num);
 
+        printf("TokenCount: %d\nTokenLength: %d\n", tokenCount, tokenLength);
         // Move this function somewhere it will get called from
-        if (tokenCount == tokenLength) {
-            for (int h = 0; h < holdingCount - 1; h++) {
-                output[outputCount].value.op = *holdingStack[h];
-                printf("%c added to output 2\n", output[outputCount].value.op);
-                outputCount++;
-                tokenCount++;
-            };
-        };
 
         if (*end == 0) {
             // It's a number 
@@ -122,7 +127,6 @@ int main () {
             printf("output.value.op: %c\n", output[outputCount].value.op);
             outputCount++;
             tokenCount++;
-            printf("TokenCount: %d\nTokenLength: %d\n", tokenCount, tokenLength);
 
         } else if (end == tokens[tokenCount]) {
             // It's an operator
@@ -175,6 +179,7 @@ int main () {
                 // if system && system != imperial: system will be user's choice
             };
         };
+    };
     };
 
     int solveCount = 0;
