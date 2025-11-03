@@ -33,7 +33,7 @@ double operate(double a, char operator, double b) {
 
 double convert (double a, char *unit) {
     double result;
-    char convertedResult[50];
+
 
     if (strcmp(unit, "in") == 0) {
         result = a * 25400000;
@@ -57,6 +57,21 @@ double convert (double a, char *unit) {
         result = 0;
     };
     return result;
+};
+
+int convertResult(double result, double system) {
+    if (system == IMPERIAL) {
+        double inches;
+        double feet;
+        double remainder;
+
+        inches = result / 25400000;
+        if (inches >= 12) {
+            remainder = inches % 12;
+            // remainder = inches mod 12
+            // feet = (inches - remainder) / 12
+        };
+    };
 };
 
 int main () {
@@ -117,7 +132,6 @@ int main () {
         printf("num: %f\n", num);
 
         printf("TokenCount: %d\nTokenLength: %d\n", tokenCount, tokenLength);
-        // Move this function somewhere it will get called from
 
         if (*end == 0) {
             // It's a number 
@@ -173,11 +187,12 @@ int main () {
                 system = IMPERIAL;
                 printf("System = %d\n", system);
                 output[outputCount].value.num = convert(num, end);
+                output[outputCount].dataType = NUMBER;
                 printf("Converted output added to output = %.2f", output[outputCount].value.num);
-                outputCount++;
-                tokenCount++;
                 // if system && system != imperial: system will be user's choice
             };
+            outputCount++;
+            tokenCount++;
         };
     };
     };
@@ -208,6 +223,11 @@ int main () {
             solveCount--;
             outputCount++;
         };
+    };
+    
+    if (system == IMPERIAL) {
+        
+
     };
     
     printf("result = %.2f\n", solveStack[0]);
