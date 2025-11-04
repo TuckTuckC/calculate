@@ -31,6 +31,7 @@ double operate(double a, char operator, double b) {
     return result;
 };
 
+
 double convert (double a, char *unit) {
     double result;
 
@@ -59,18 +60,34 @@ double convert (double a, char *unit) {
     return result;
 };
 
-int convertResult(double result, double system) {
+struct convertResult(double result, double system) {
+    // continue
+
+    struct unitResult {
+        double ft;
+        double in;
+    };
+
     if (system == IMPERIAL) {
         double inches;
         double feet;
         double remainder;
 
+        struct unitResult imperialResult;
+
         inches = result / 25400000;
         if (inches >= 12) {
-            remainder = inches % 12;
-            // remainder = inches mod 12
-            // feet = (inches - remainder) / 12
+            feet = inches / 12;
+            int feetFloored = feet;
+            // if feet not a whole number: round down and subtract feet from inches
+            if (feetFloored < feet) {
+                feet = feetFloored;
+                inches = inches - (feetFloored * 12);
+            };
         };
+        imperialResult.ft = feet;
+        imperialResult.in = inches;
+        return imperialResult;
     };
 };
 
@@ -88,6 +105,7 @@ int main () {
             char op;
         } value;
     } output[200];
+
 
     printf("Enter a string: \n");
 
