@@ -60,20 +60,14 @@ double convert (double a, char *unit) {
     return result;
 };
 
-struct convertResult(double result, double system) {
+double inches;
+double feet;
+
+double convertResult(double result, int system) {
     // continue
 
-    struct unitResult {
-        double ft;
-        double in;
-    };
-
     if (system == IMPERIAL) {
-        double inches;
-        double feet;
         double remainder;
-
-        struct unitResult imperialResult;
 
         inches = result / 25400000;
         if (inches >= 12) {
@@ -85,10 +79,8 @@ struct convertResult(double result, double system) {
                 inches = inches - (feetFloored * 12);
             };
         };
-        imperialResult.ft = feet;
-        imperialResult.in = inches;
-        return imperialResult;
     };
+    return 0;
 };
 
 int main () {
@@ -243,12 +235,13 @@ int main () {
         };
     };
     
-    if (system == IMPERIAL) {
-        
-
+    if (system > 0) {
+        convertResult(solveStack[0], system);
+        printf("result = %.1fft %.2fin\n", feet, inches);
+    } else {
+        printf("result = %.2f\n", solveStack[0]);
     };
-    
-    printf("result = %.2f\n", solveStack[0]);
+
 
     return 0;
 };
