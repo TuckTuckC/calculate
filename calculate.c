@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
 
 #define IMPERIAL 1
 #define METRIC 2
@@ -64,17 +63,14 @@ double inches;
 double feet;
 
 double convertResult(double result, int system) {
-    // continue
 
     if (system == IMPERIAL) {
-        double remainder;
 
         inches = result / 25400000;
         if (inches >= 12) {
             feet = inches / 12;
             int feetFloored = feet;
-            // if feet not a whole number: round down and subtract feet from inches
-            if (feetFloored < feet) {
+            if (feetFloored <= feet) {
                 feet = feetFloored;
                 inches = inches - (feetFloored * 12);
             };
@@ -196,7 +192,17 @@ int main () {
             if (*end == *"in" || *end == *"ft" || *end == *"yd" || *end == *"mi") {
                 system = IMPERIAL;
                 printf("System = %d\n", system);
-                output[outputCount].value.num = convert(num, end);
+                // if outputCOunt - 1 is not an operator, add it to currently converted double
+                if (output[outputCount - 1].dataType == NUMBER) {
+                    output[outputCount - 1].value.num
+                    =
+                    output[outputCount - 1].value.num
+                    +
+                    convert(num, end);
+                    // continue
+                } else {
+                    output[outputCount].value.num = convert(num, end);
+                };
                 output[outputCount].dataType = NUMBER;
                 printf("Converted output added to output = %.2f", output[outputCount].value.num);
                 // if system && system != imperial: system will be user's choice
@@ -237,7 +243,7 @@ int main () {
     
     if (system > 0) {
         convertResult(solveStack[0], system);
-        printf("result = %.1fft %.2fin\n", feet, inches);
+        printf("result = %.0fft %.2fin\n", feet, inches);
     } else {
         printf("result = %.2f\n", solveStack[0]);
     };
