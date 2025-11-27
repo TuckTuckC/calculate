@@ -121,12 +121,13 @@ int main () {
     while (tokenCount <= tokenLength ) {
         printf("holdingCount: %d\n", holdingCount);
         if (tokenCount == tokenLength) {
-            for (int h = 0; h < holdingCount; h++) {
+            while (holdingCount > 0) {
                 printf("GOT HERE\n");
-                output[outputCount].value.op = *holdingStack[h];
+                output[outputCount].value.op = *holdingStack[holdingCount - 1];
                 output[outputCount].dataType = OPERATOR;
                 printf("%c added to output 2\n", output[outputCount].value.op);
                 outputCount++;
+                holdingCount--;
             };
             tokenCount++;
         } else {
