@@ -200,6 +200,7 @@ int main () {
                     output[outputCount - 1].value.num
                     +
                     convert(num, end);
+                    outputCount--;
                     // continue
                 } else {
                     output[outputCount].value.num = convert(num, end);
