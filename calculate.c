@@ -81,175 +81,174 @@ double convertResult(double result, int system) {
 
 int main () {
     char input[200];
-    char *tokens[100];
-    char *holdingStack[100];
-    // char *output[200];
-    int system;
+    while(strcmp(input, "quit") != 0) {
+        char *tokens[100];
+        char *holdingStack[100];
+        int system;
 
-    struct {
-        int dataType;
-        union {
-            double num;
-            char op;
-        } value;
-    } output[200];
+        struct {
+            int dataType;
+            union {
+                double num;
+                char op;
+            } value;
+        } output[200];
 
 
-    printf("Enter a string: \n");
+        printf("Enter a string: \n");
 
-    fgets(input, 200, stdin);
-    int inputLength = strlen(input);
-    if (input[inputLength - 1] == '\n') input[inputLength - 1] = '\0';
-    printf("You entered: %s\nLength: %d\n", input, inputLength);
+        fgets(input, 200, stdin);
+        int inputLength = strlen(input);
+        if (input[inputLength - 1] == '\n') input[inputLength - 1] = '\0';
+        printf("You entered: %s\nLength: %d\n", input, inputLength);
 
-    int tokenCount = 0;
-    int tokenLength = 0;
-    int holdingCount = 0;
-    int outputCount = 0;
-    char *token = strtok(input, " ");
+        int tokenCount = 0;
+        int tokenLength = 0;
+        int holdingCount = 0;
+        int outputCount = 0;
+        char *token = strtok(input, " ");
 
-    int i = 0;
-    while (token != NULL && i < 100) {
-        tokens[i] = token;
-        token = strtok(NULL, " ");
-        tokenLength++;
-        i++;
-    };
+        int i = 0;
+        while (token != NULL && i < 100) {
+            tokens[i] = token;
+            token = strtok(NULL, " ");
+            tokenLength++;
+            i++;
+        };
 
-    printf("tokenLength: %i\n", tokenLength);
+        printf("tokenLength: %i\n", tokenLength);
 
-    while (tokenCount <= tokenLength ) {
-        printf("holdingCount: %d\n", holdingCount);
-        if (tokenCount == tokenLength) {
-            while (holdingCount > 0) {
-                printf("GOT HERE\n");
-                output[outputCount].value.op = *holdingStack[holdingCount - 1];
-                output[outputCount].dataType = OPERATOR;
-                printf("%c added to output 2\n", output[outputCount].value.op);
-                outputCount++;
-                holdingCount--;
-            };
-            tokenCount++;
-        } else {
-
-        char *end;
-        double num = strtod(tokens[tokenCount], &end);
-        printf("Token: %s\n", tokens[tokenCount]);
-        printf("end: %d\n", *end);
-        printf("num: %f\n", num);
-
-        printf("TokenCount: %d\nTokenLength: %d\n", tokenCount, tokenLength);
-
-        if (*end == 0) {
-            // It's a number 
-            output[outputCount].value.num = num;
-            output[outputCount].dataType = NUMBER;
-            printf("%.2f added to output 1\n", output[outputCount].value.num);
-            printf("output.value.op: %c\n", output[outputCount].value.op);
-            outputCount++;
-            tokenCount++;
-
-        } else if (end == tokens[tokenCount]) {
-            // It's an operator
-            if (holdingCount == 0) {
-                holdingStack[holdingCount] = tokens[tokenCount];
-                printf("%s added to holdingStack 1\n", holdingStack[holdingCount]);
-                holdingCount++;
-                tokenCount++;
-
-            } else if (*end == '+' || *end == '-') {
-                output[outputCount].value.op = *holdingStack[holdingCount - 1];
-                output[outputCount].dataType = OPERATOR;
-                printf("%c added to output 3\n", output[outputCount].value.op);
-                holdingCount--;
-                outputCount++;
-
-            } else if (*end == '*' || *end == '/') {
-                if (
-                    *holdingStack[holdingCount - 1] == '+' 
-                    || 
-                    *holdingStack[holdingCount - 1] == '-'
-                ) {
-                    holdingStack[holdingCount] = tokens[tokenCount];
-                    printf("%s added to holdingStack 2\n", holdingStack[holdingCount]);
-                    holdingCount++;
-                    tokenCount++;
-
-                } else if (
-                    *holdingStack[holdingCount - 1] == '*' 
-                    || 
-                    *holdingStack[holdingCount - 1] == '/'
-                ) {
-                    //c
-                    output[outputCount].value.op = *holdingStack[holdingCount -1];
+        while (tokenCount <= tokenLength ) {
+            printf("holdingCount: %d\n", holdingCount);
+            if (tokenCount == tokenLength) {
+                while (holdingCount > 0) {
+                    printf("GOT HERE\n");
+                    output[outputCount].value.op = *holdingStack[holdingCount - 1];
                     output[outputCount].dataType = OPERATOR;
-                    printf("%c added to output 4\n", output[outputCount].value.op);
+                    printf("%c added to output 2\n", output[outputCount].value.op);
                     outputCount++;
                     holdingCount--;
-                }
-            };
-        } else {
-            printf("%s Must be a unit of measurement\n", end);
-            if (*end == *"in" || *end == *"ft" || *end == *"yd" || *end == *"mi") {
-                system = IMPERIAL;
-                printf("System = %d\n", system);
-                // if outputCOunt - 1 is not an operator, add it to currently converted double
-                if (output[outputCount - 1].dataType == NUMBER) {
-                    output[outputCount - 1].value.num
-                    =
-                    output[outputCount - 1].value.num
-                    +
-                    convert(num, end);
-                    outputCount--;
-                    // continue
-                } else {
-                    output[outputCount].value.num = convert(num, end);
                 };
-                output[outputCount].dataType = NUMBER;
-                printf("Converted output added to output = %.2f", output[outputCount].value.num);
-                // if system && system != imperial: system will be user's choice
+                tokenCount++;
+            } else {
+
+                char *end;
+                double num = strtod(tokens[tokenCount], &end);
+                printf("Token: %s\n", tokens[tokenCount]);
+                printf("end: %d\n", *end);
+                printf("num: %f\n", num);
+
+                printf("TokenCount: %d\nTokenLength: %d\n", tokenCount, tokenLength);
+
+                if (*end == 0) {
+                    // It's a number 
+                    output[outputCount].value.num = num;
+                    output[outputCount].dataType = NUMBER;
+                    printf("%.2f added to output 1\n", output[outputCount].value.num);
+                    printf("output.value.op: %c\n", output[outputCount].value.op);
+                    outputCount++;
+                    tokenCount++;
+
+                } else if (end == tokens[tokenCount]) {
+                    // It's an operator
+                    if (holdingCount == 0) {
+                        holdingStack[holdingCount] = tokens[tokenCount];
+                        printf("%s added to holdingStack 1\n", holdingStack[holdingCount]);
+                        holdingCount++;
+                        tokenCount++;
+
+                    } else if (*end == '+' || *end == '-') {
+                        output[outputCount].value.op = *holdingStack[holdingCount - 1];
+                        output[outputCount].dataType = OPERATOR;
+                        printf("%c added to output 3\n", output[outputCount].value.op);
+                        holdingCount--;
+                        outputCount++;
+
+                    } else if (*end == '*' || *end == '/') {
+                        if (
+                                *holdingStack[holdingCount - 1] == '+' 
+                                || 
+                                *holdingStack[holdingCount - 1] == '-'
+                           ) {
+                            holdingStack[holdingCount] = tokens[tokenCount];
+                            printf("%s added to holdingStack 2\n", holdingStack[holdingCount]);
+                            holdingCount++;
+                            tokenCount++;
+
+                        } else if (
+                                *holdingStack[holdingCount - 1] == '*' 
+                                || 
+                                *holdingStack[holdingCount - 1] == '/'
+                                ) {
+                            //c
+                            output[outputCount].value.op = *holdingStack[holdingCount -1];
+                            output[outputCount].dataType = OPERATOR;
+                            printf("%c added to output 4\n", output[outputCount].value.op);
+                            outputCount++;
+                            holdingCount--;
+                        }
+                    };
+                } else {
+                    printf("%s Must be a unit of measurement\n", end);
+                    if (*end == *"in" || *end == *"ft" || *end == *"yd" || *end == *"mi") {
+                        system = IMPERIAL;
+                        printf("System = %d\n", system);
+                        // This is for complex measurements like "4ft 2in"
+                        if (output[outputCount - 1].dataType == NUMBER) {
+                            output[outputCount - 1].value.num
+                                =
+                                output[outputCount - 1].value.num
+                                +
+                                convert(num, end);
+                            outputCount--;
+                        } else {
+                            output[outputCount].value.num = convert(num, end);
+                        };
+                        output[outputCount].dataType = NUMBER;
+                        printf("Converted output added to output = %.2f", output[outputCount].value.num);
+                        // if system && system != imperial: system will be user's choice
+                    };
+                    outputCount++;
+                    tokenCount++;
+                };
             };
-            outputCount++;
-            tokenCount++;
+        };
+
+        int solveCount = 0;
+        double solveStack[200];
+        int outputlength = outputCount;
+        outputCount = 0;
+        while (outputCount < outputlength) {
+            printf("datatype: %d\n", output[outputCount].dataType);
+            printf("number: %f\n", output[outputCount].value.num);
+            printf("operator: %c\n", output[outputCount].value.op);
+            if (output[outputCount].dataType == NUMBER) {
+                // it's a number 
+                solveStack[solveCount] = output[outputCount].value.num;
+                printf("%.2f added to solveStack\n", solveStack[solveCount]);
+                outputCount++;
+                solveCount++;
+
+            } else if (output[outputCount].dataType == OPERATOR) {
+                double result = operate(
+                        solveStack[solveCount - 2], 
+                        output[outputCount].value.op, 
+                        solveStack[solveCount - 1]
+                        );
+                solveStack[solveCount - 2] = result;
+                printf("added %.2f to solveStack\n", solveStack[solveCount - 2]);
+                solveCount--;
+                outputCount++;
+            };
+        };
+
+        if (system > 0) {
+            convertResult(solveStack[0], system);
+            printf("result = %.0fft %.2fin\n", feet, inches);
+        } else {
+            printf("result = %.2f\n", solveStack[0]);
         };
     };
-    };
-
-    int solveCount = 0;
-    double solveStack[200];
-    int outputlength = outputCount;
-    outputCount = 0;
-    while (outputCount < outputlength) {
-        printf("datatype: %d\n", output[outputCount].dataType);
-        printf("number: %f\n", output[outputCount].value.num);
-        printf("operator: %c\n", output[outputCount].value.op);
-        if (output[outputCount].dataType == NUMBER) {
-            // it's a number 
-            solveStack[solveCount] = output[outputCount].value.num;
-            printf("%.2f added to solveStack\n", solveStack[solveCount]);
-            outputCount++;
-            solveCount++;
-
-        } else if (output[outputCount].dataType == OPERATOR) {
-            double result = operate(
-                                solveStack[solveCount - 2], 
-                                output[outputCount].value.op, 
-                                solveStack[solveCount - 1]
-                            );
-            solveStack[solveCount - 2] = result;
-            printf("added %.2f to solveStack\n", solveStack[solveCount - 2]);
-            solveCount--;
-            outputCount++;
-        };
-    };
-    
-    if (system > 0) {
-        convertResult(solveStack[0], system);
-        printf("result = %.0fft %.2fin\n", feet, inches);
-    } else {
-        printf("result = %.2f\n", solveStack[0]);
-    };
-
 
     return 0;
 };
