@@ -7,6 +7,26 @@
 #define NUMBER 3
 #define OPERATOR 4
 
+int printDoubleArray(double array[]) {
+    printf("Printing Array of FLoats");
+    int i = 0;
+    while (array[i]) {
+        printf("%f", array[i]);
+    };
+    printf("\n");
+    return 0;
+};
+
+int printCharArray(char *array[], int count) {
+    printf("Printing Array of Chars\n");
+    for (int i = 0; i < count; i++) {
+        printf("%c", *array[i]);
+    };
+    printf("\n");
+    return 0;
+};
+
+
 double operate(double a, char operator, double b) {
     double result;
     switch(operator) {
@@ -70,10 +90,10 @@ double convertResult(double result, int system) {
         if (inches >= 12) {
             feet = inches / 12;
             int feetFloored = feet;
-            if (feetFloored <= feet) {
+            if (feetFloored < feet) {
                 feet = feetFloored;
-                inches = inches - (feetFloored * 12);
             };
+            inches = inches - (feetFloored * 12);
         };
     };
     return 0;
@@ -120,6 +140,7 @@ int main () {
 
         while (tokenCount <= tokenLength ) {
             printf("holdingCount: %d\n", holdingCount);
+            printCharArray(holdingStack, holdingCount);
             if (tokenCount == tokenLength) {
                 while (holdingCount > 0) {
                     printf("GOT HERE\n");
