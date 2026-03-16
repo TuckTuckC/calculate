@@ -32,15 +32,19 @@ double operate(double a, char operator, double b) {
     switch(operator) {
         case '+':
             result = a + b;
+            printf("%.2f + %.2f = %f\n", a, b, result);
             break;
         case '-':
             result = a - b;
+            printf("%.2f - %.2f = %f\n", a, b, result);
             break;
         case '*':
             result = a * b;
+            printf("%.2f * %.2f = %f\n", a, b, result);
             break;
         case '/':
             result = a / b;
+            printf("%.2f / %.2f = %f\n", a, b, result);
             break;
         default: 
             printf("Unknown operator: %c\n", operator);
@@ -83,6 +87,8 @@ double inches;
 double feet;
 
 double convertResult(double result, int system) {
+    inches = 0;
+    feet = 0;
 
     if (system == IMPERIAL) {
 
@@ -102,17 +108,34 @@ double convertResult(double result, int system) {
 int main () {
     char input[200];
     while(strcmp(input, "quit") != 0) {
-        char *tokens[100];
-        char *holdingStack[100];
-        int system;
+        char *tokens[100] = {0};
+        char *holdingStack[100] = {0};
+        int system = 0;
+        printf("SolveStack: %f\n", holdingStack[0]);
 
-        struct {
+        struct outputItem {
             int dataType;
             union {
                 double num;
                 char op;
             } value;
-        } output[200];
+        };
+
+        struct outputItem output[200] = {0};
+
+        int printOutputArray (int count) {
+            printf("Printing Array of Output\n");
+            for (int i = 0; i < count - 1; i++) {
+                if(output[i].dataType == NUMBER) {
+                    printf("%f", output[i].value);
+
+                }else if (output[i].dataType == OPERATOR) {
+                    printf("%c", output[i].value);
+                };
+            };
+            printf("\n");
+            return 0;
+        };
 
 
         printf("Enter a string: \n");
@@ -226,7 +249,7 @@ int main () {
                             output[outputCount].value.num = convert(num, end);
                         };
                         output[outputCount].dataType = NUMBER;
-                        printf("Converted output added to output = %.2f", output[outputCount].value.num);
+                        printf("Converted output added to output = %.2f\n", output[outputCount].value.num);
                         // if system && system != imperial: system will be user's choice
                     };
                     outputCount++;
@@ -239,10 +262,22 @@ int main () {
         double solveStack[200];
         int outputlength = outputCount;
         outputCount = 0;
+        // Only Prints Output Array
+        printf("Printing Array of Output: [");
+        for (int i = 0; i <= outputCount + 1; i++) {
+            if(output[i].dataType == NUMBER) {
+                printf("%.2f, ", output[i].value.num);
+
+            }else if (output[i].dataType == OPERATOR) {
+                printf("%c, ", output[i].value.op);
+            };
+        };
+        printf("]\n");
         while (outputCount < outputlength) {
             printf("datatype: %d\n", output[outputCount].dataType);
             printf("number: %f\n", output[outputCount].value.num);
             printf("operator: %c\n", output[outputCount].value.op);
+
             if (output[outputCount].dataType == NUMBER) {
                 // it's a number 
                 solveStack[solveCount] = output[outputCount].value.num;
@@ -251,6 +286,7 @@ int main () {
                 solveCount++;
 
             } else if (output[outputCount].dataType == OPERATOR) {
+                printf("");
                 double result = operate(
                         solveStack[solveCount - 2], 
                         output[outputCount].value.op, 
@@ -264,7 +300,13 @@ int main () {
         };
 
         if (system > 0) {
-            convertResult(solveStack[0], system);
+            printf("SolveStack: ");
+            for (int i = 0; i <= solveCount + 1; i++) {
+                printf("%f, ", solveStack[i]);
+            };
+            convertResult(solveStack[solveCount - 1], system);
+            printf("\n");
+            printf("Solution: %.2f\n", solveStack[0]);
             printf("result = %.0fft %.2fin\n", feet, inches);
         } else {
             printf("result = %.2f\n", solveStack[0]);
